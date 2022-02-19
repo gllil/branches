@@ -21,7 +21,7 @@ module.exports = {
           textAlign: "center",
           transition: "all 0.5s",
           "&:hover": {
-            backgroundColor: "#6366f1",
+            backgroundColor: "#4c1d95",
           },
         },
       });
