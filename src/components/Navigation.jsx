@@ -10,7 +10,7 @@ const Navigation = () => {
         <img src={branchesLogo} alt="branches logo" class="w-48 md:w-64"/>
       </div>
       <div class="flex justify-end items-center ">
-        <button type="button" class="text-center text-white bg-indigo-900 py-2 px-2 font-conf rounded-xl mt-2 mr-2">
+        <button type="button" class="btn mt-2 mr-2">
           Login
         </button>
       </div>
