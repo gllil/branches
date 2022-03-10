@@ -1,5 +1,5 @@
 import { For } from "solid-js";
-import leaves from "../assets/svg/leaves-3.svg";
+import family from "../assets/images/family.png";
 import eventIcon from "../assets/icons/work-schedule.png";
 import contactIcon from "../assets/icons/contacts.png";
 import mailboxIcon from "../assets/icons/mailbox.png";
@@ -31,7 +31,8 @@ const Landing = () => {
         <div class="mb-10 block md:hidden flex-wrap justify-items-center">
           <img
             class="max-w-xs w-3/6 opacity-90 mx-auto my-auto "
-            src={leaves}
+            src={family}
+            alt="family"
           />
         </div>
         <div class="flex-wrap mx-auto">
@@ -43,15 +44,15 @@ const Landing = () => {
             are in one location to connect with. Use Branches to plan reunions
             and one-time events and reoccurring activities.
           </h3>
-          <button class="place-self-end btn mt-4 text-sm md:text-base">
+          <button
+            class="place-self-end btn mt-4 text-sm md:text-base"
+            onClick={() => (location.href = "/create-account")}
+          >
             Create a free account
           </button>
         </div>
         <div class="mt-20 h-max hidden md:block flex-wrap justify-items-center sm:mt-0">
-          <img
-            class="opacity-90 md: lg:max-w-md mx-auto my-auto "
-            src={leaves}
-          />
+          <img class="opacity-90 lg:max-w-md mx-auto my-auto " src={family} />
         </div>
       </div>
       <div class="md:flex mt-32 md:columns-3">
