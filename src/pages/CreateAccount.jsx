@@ -1,7 +1,8 @@
 import { createSignal } from "solid-js";
+import { useNavigate } from "solid-app-router";
 import { auth, db } from "../../firebase/config";
 import { doc, setDoc } from "firebase/firestore";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 const CreateAccount = () => {
   const [success, setSuccess] = createSignal(null);
@@ -10,7 +11,7 @@ const CreateAccount = () => {
   const [formData, setFormData] = createSignal(null);
   const [password, setPassWord] = createSignal(null);
   const [confPassWord, setConfPassword] = createSignal(null);
-  const createAccountForm = document.getElementById("createAccountForm");
+  const navigate = useNavigate();
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
@@ -22,20 +23,25 @@ const CreateAccount = () => {
     e.preventDefault();
     if (confPassWord() === password()) {
       setLoading(true);
+      createUserWithEmailAndPassword();
       createUserWithEmailAndPassword(auth, formData().email, password())
-        .then((userCredential) => {
+        .then(async (userCredential) => {
           const user = userCredential.user;
+          await updateProfile(auth.currentUser, {
+            displayName: formData().firstName,
+          }).catch((err) => console.error(err));
           setDoc(doc(db, "users", user.uid), formData()).then(() => {
             setLoading(false);
             setSuccess("Account has been created");
+            document.createAccountForm.reset();
             setTimeout(() => {
               setSuccess(null);
-              createAccountForm.reset();
+              navigate("/login", { replace: true });
             }, 3000);
           });
         })
         .catch((err) => {
-          console.log(err.message);
+          console.error(err.message);
           setError(err.message.split(": ")[1]);
           setTimeout(() => {
             setError(null);
@@ -59,7 +65,11 @@ const CreateAccount = () => {
         <div class="text-2xl relative font-semibold before:absolute before:h-1 before:left-0 before:bottom-0 before:content-[''] before:w-7 before:bg-indigo-900">
           Create Account
         </div>
-        <form id="createAccountForm" onSubmit={handleFormSubmit}>
+        <form
+          id="createAccountForm"
+          name="createAccountForm"
+          onSubmit={handleFormSubmit}
+        >
           <div class="flex max-h-[300px] overflow-y-scroll sm:overflow-visible sm:max-h-full flex-wrap justify-between mx-0 mt-5 mb-3">
             <div class="input-box">
               <span class="details">First Name</span>
