@@ -42,6 +42,7 @@ const CreateAccount = () => {
         })
         .catch((err) => {
           console.error(err.message);
+          setLoading(false);
           setError(err.message.split(": ")[1]);
           setTimeout(() => {
             setError(null);
