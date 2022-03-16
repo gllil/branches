@@ -20,9 +20,6 @@ function App() {
   const navigate = useNavigate();
   createEffect(() => {
     const setPersistenceSession = () => {
-      let email = "...";
-      let password = "...";
-
       setPersistence(auth, browserSessionPersistence)
         .then(() => {
           return signInWithEmailAndPassword(auth, email, password);

@@ -1,6 +1,7 @@
 {
   "name": "Branches",
   "short_name": "Branches",
+  "start_url": "https://branches-5434a.web.app/",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
