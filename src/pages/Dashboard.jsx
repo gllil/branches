@@ -14,11 +14,11 @@ const Dashboard = () => {
       <div class="font-conf text-2xl text-center my-7">{`Welcome ${
         currentUser()?.displayName
       }!`}</div>
-      <div class="relative h-0 pb-[56.25%] pt-[25px]">
+      <div class="relative h-0 pb-[56.25%] pt-[25px] hidden md:block">
         <div class="absolute top-9 right-[30%] z-10 w-[10%] ">
           <div className="relative h-full w-full flex justify-center items-center heart-fruit cursor-pointer">
             <img src={heartFruit} alt="heart fruit options" />
-            <div className="absolute z-20 text-white text-sm lg:text-lg font-semibold font-conf mt-5 ">
+            <div className="absolute z-20 text-white text-xs xl:text-lg font-semibold font-conf mt-5 ">
               Contacts
             </div>
           </div>
