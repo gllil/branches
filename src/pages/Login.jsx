@@ -138,9 +138,14 @@ const Login = () => {
             </button>
           )}
         </form>
-        <button class="" onClick={handleForgotPassword}>
-          Forgot Password?
-        </button>
+        <div class="flex justify-evenly">
+          <button class="" onClick={handleForgotPassword}>
+            Forgot Password?
+          </button>
+          <button class="" onClick={() => (location.href = "/create-account")}>
+            Dont have an account?
+          </button>
+        </div>
       </div>
       {/* this is the modal that appears when forgot password button is clicked. it is hidden initially*/}
       {showForgotPw() && (

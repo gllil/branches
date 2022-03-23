@@ -14,6 +14,7 @@ import CreateAccount from "./pages/CreateAccount";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const [currentUser, setCurrentUser] = createSignal(null);
@@ -29,13 +30,14 @@ function App() {
     setPersistenceSession();
     onAuthStateChanged(auth, (userData) => {
       setCurrentUser(userData);
+      console.log(currentUser());
     });
   });
 
   return (
     <div class="bg-gradient-to-b from-violet-500 min-h-screen bg-fixed relative">
       <Navigation />
-      <div class="container mx-auto min-h-[80vh]">
+      <div class="container mx-auto min-h-[75vh]">
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/create-account" element={<CreateAccount />} />
@@ -50,6 +52,7 @@ function App() {
               )
             }
           />
+          <Route path="/*" element={<NotFound />} />
         </Routes>
       </div>
       <Footer />

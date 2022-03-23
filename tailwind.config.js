@@ -63,6 +63,12 @@ module.exports = {
             borderColor: "#9b59b6",
           },
         },
+        ".heart-fruit": {
+          "&:hover": {
+            animation: "swing",
+            "animation-duration": "2s",
+          },
+        },
       });
     }),
   ],

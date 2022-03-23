@@ -1,6 +1,17 @@
 const Modal = ({ children, setShow }) => {
+  const handleBackDropClick = (e) => {
+    const backdrop = document.querySelector(".backdrop");
+    e.stopPropagation();
+    if (e.target !== backdrop) {
+      return;
+    }
+    setShow(false);
+  };
   return (
-    <div class="absolute top-0 left-0 bottom-0 right-0 backdrop-blur-md z-40 flex justify-center items-center">
+    <div
+      class="absolute top-0 left-0 bottom-0 right-0 backdrop-blur-md z-40 flex justify-center items-center backdrop"
+      onClick={handleBackDropClick}
+    >
       <div class="font-conf max-w-full sm:max-w-2xl w-full bg-violet-500 absolute rounded shadow-lg p-3 z-50">
         <div class="flex justify-end">
           <svg
