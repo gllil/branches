@@ -66,7 +66,7 @@ module.exports = {
         ".heart-fruit": {
           "&:hover": {
             animation: "swing",
-            "animation-duration": "2s",
+            "animation-duration": "1s",
           },
         },
       });
