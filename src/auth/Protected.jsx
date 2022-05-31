@@ -4,15 +4,13 @@ import {
   setPersistence,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { children, createContext, createEffect } from "solid-js";
-import { createStore } from "solid-js/store";
 import { auth } from "../../firebase/config";
+import { Show, createEffect, createSignal } from "solid-js";
+import Login from "../pages/Login";
+import { Outlet } from "solid-app-router";
 
-export const AuthContext = createContext();
-
-export function AuthProvider(props) {
-  const [state, setState] = createStore(null);
-
+const Protected = () => {
+  const [currentUser, setCurrentUser] = createSignal(null);
   createEffect(() => {
     const setPersistenceSession = () => {
       setPersistence(auth, browserSessionPersistence)
@@ -23,13 +21,15 @@ export function AuthProvider(props) {
     };
     setPersistenceSession();
     onAuthStateChanged(auth, (userData) => {
-      setState(userData);
-      console.log(currentUser());
+      setCurrentUser(userData);
     });
   });
-  const authContext = { state };
 
-  const c = children(() => props.children);
+  return (
+    <Show when={currentUser()} fallback={<Login />}>
+      <Outlet />
+    </Show>
+  );
+};
 
-  return <AuthContext.Provider value={authContext}>{c}</AuthContext.Provider>;
-}
+export default Protected;

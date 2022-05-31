@@ -1,4 +1,6 @@
-const Modal = ({ children, setShow }) => {
+import { children } from "solid-js";
+
+const Modal = (props) => {
   const handleBackDropClick = (e) => {
     const backdrop = document.querySelector(".backdrop");
     e.stopPropagation();
@@ -7,19 +9,20 @@ const Modal = ({ children, setShow }) => {
     }
     setShow(false);
   };
+  const c = children(() => props.children);
   return (
     <div
-      class="absolute top-0 left-0 bottom-0 right-0 backdrop-blur-md z-40 flex justify-center items-center backdrop"
+      class="absolute top-0 left-0 bottom-0 right-0 backdrop-blur-md z-40 flex justify-center backdrop"
       onClick={handleBackDropClick}
     >
-      <div class="font-conf max-w-full sm:max-w-2xl w-full bg-violet-500 absolute rounded shadow-lg p-3 z-50">
+      <div class="font-conf max-w-full sm:max-w-2xl w-full bg-violet-500 absolute top-[10%] rounded shadow-lg p-3 z-50">
         <div class="flex justify-end">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className=" h-6 w-6"
             viewBox="0 0 20 20"
             fill="white"
-            onClick={() => setShow(false)}
+            onClick={() => props.setShow(false)}
             class="cursor-pointer"
           >
             <path
@@ -29,7 +32,7 @@ const Modal = ({ children, setShow }) => {
             />
           </svg>
         </div>
-        {children}
+        {c}
       </div>
     </div>
   );

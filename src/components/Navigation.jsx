@@ -2,7 +2,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useNavigate } from "solid-app-router";
 import { createEffect, createSignal } from "solid-js";
 import { auth } from "../../firebase/config";
-import branchesLogo from "../assets/logos/branchesLogo.svg";
+import branchesLogo from "../assets/logos/Branches.png";
 const Navigation = () => {
   const [currentUser, setCurrentUser] = createSignal(null);
   const navigate = useNavigate();

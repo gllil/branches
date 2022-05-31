@@ -1,10 +1,10 @@
 import {
-  onAuthStateChanged,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { useNavigate } from "solid-app-router";
-import { createEffect, createSignal } from "solid-js";
+import { createSignal } from "solid-js";
+import { Show } from "solid-js/web";
 import { auth } from "../../firebase/config";
 import Modal from "../components/Modal";
 
@@ -84,13 +84,6 @@ const Login = () => {
         }, 10000);
       });
   };
-  createEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user && !loginProssecing()) {
-        navigate("/dashboard", { replace: true });
-      }
-    });
-  });
 
   return (
     <div class="min-h-[80vh] mx-auto flex min-w-screen justify-center items-center columns-1">
@@ -148,7 +141,8 @@ const Login = () => {
         </div>
       </div>
       {/* this is the modal that appears when forgot password button is clicked. it is hidden initially*/}
-      {showForgotPw() && (
+
+      <Show when={showForgotPw()}>
         <Modal setShow={setShowForgotPw}>
           <div class="text-2xl relative font-semibold before:absolute before:h-1 before:left-0 before:bottom-0 before:content-[''] before:w-7 before:bg-indigo-900">
             Forgot Password
@@ -193,7 +187,7 @@ const Login = () => {
             )}
           </form>
         </Modal>
-      )}
+      </Show>
     </div>
   );
 };

@@ -41,6 +41,18 @@ module.exports = {
             width: "100%",
           },
         },
+        ".modal-input-box": {
+          marginBottom: "15px",
+          width: "100%",
+        },
+        ".input-box-full": {
+          marginBottom: "15px",
+          width: "100%",
+          "@media (max-width: 640px)": {
+            marginBottom: "15px",
+            width: "100%",
+          },
+        },
         ".details": {
           display: "block",
           fontWeight: "600",
@@ -55,9 +67,28 @@ module.exports = {
           paddingLeft: "15px",
           fontSize: "16px",
           borderBottomWidth: "2px",
+          transition: "all 0.1s ease",
+          "&:focus": {
+            borderColor: "#9b59b6",
+            borderWidth: "3px",
+          },
+          "&:valid": {
+            borderColor: "#9b59b6",
+          },
+        },
+        select: {
+          width: "100%",
+          height: "45px",
+          outline: "none",
+          borderRadius: "5px",
+          border: "1px solid #ccc",
+          paddingLeft: "15px",
+          fontSize: "16px",
+          borderBottomWidth: "2px",
           transition: "all 0.3s ease",
           "&:focus": {
             borderColor: "#9b59b6",
+            borderWidth: "3px",
           },
           "&:valid": {
             borderColor: "#9b59b6",

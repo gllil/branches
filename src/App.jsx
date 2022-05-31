@@ -1,57 +1,31 @@
-import { Route, Routes, useNavigate } from "solid-app-router";
-import {
-  browserSessionPersistence,
-  onAuthStateChanged,
-  setPersistence,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-import { createEffect, createSignal } from "solid-js";
-import { auth } from "../firebase/config";
+import { Route, Routes } from "solid-app-router";
+import { lazy } from "solid-js";
 
-import Footer from "./components/Footer";
-import Navigation from "./components/Navigation";
+const Footer = lazy(() => import("./components/Footer"));
+const Navigation = lazy(() => import("./components/Navigation"));
 import CreateAccount from "./pages/CreateAccount";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
+const Dashboard = lazy(() => import("./pages/Dashboard"));
 import NotFound from "./pages/NotFound";
+import Protected from "./auth/Protected";
+import Profile from "./pages/Profile";
+import UpdateAddress from "./components/UpdateAddress";
 
 function App() {
-  const [currentUser, setCurrentUser] = createSignal(null);
-  const navigate = useNavigate();
-  createEffect(() => {
-    const setPersistenceSession = () => {
-      setPersistence(auth, browserSessionPersistence)
-        .then(() => {
-          return signInWithEmailAndPassword(auth, email, password);
-        })
-        .catch((err) => console.error(err));
-    };
-    setPersistenceSession();
-    onAuthStateChanged(auth, (userData) => {
-      setCurrentUser(userData);
-      console.log(currentUser());
-    });
-  });
-
   return (
-    <div class="bg-gradient-to-b from-violet-500 min-h-screen bg-fixed relative">
+    <div class="bg-gradient-to-b from-violet-500 to-violet-200 min-h-screen bg-fixed relative">
       <Navigation />
       <div class="container mx-auto min-h-[75vh]">
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/create-account" element={<CreateAccount />} />
           <Route path="/login" element={<Login />} />
-          <Route
-            path="/dashboard"
-            element={
-              currentUser() ? (
-                <Dashboard />
-              ) : (
-                navigate("/login", { replace: true })
-              )
-            }
-          />
+          <Route path="" element={<Protected />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/address" element={<UpdateAddress />} />
+          </Route>
           <Route path="/*" element={<NotFound />} />
         </Routes>
       </div>
