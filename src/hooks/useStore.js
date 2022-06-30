@@ -1,20 +1,27 @@
 import {
-  arrayUnion,
+  addDoc,
   collection,
   doc,
   onSnapshot,
   query,
   setDoc,
-  updateDoc,
 } from "firebase/firestore";
 import { createEffect, createSignal } from "solid-js";
 import { auth, db } from "../../firebase/config";
 
 const [user, setUser] = createSignal(null);
 const [users, setUsers] = createSignal(null);
+const [houseHoldMembers, setHouseHoldMembers] = createSignal(null);
 
 const useStore = () => {
   const userRef = doc(db, "users", auth?.currentUser?.uid);
+  const houseHoldRef = collection(
+    db,
+    "users",
+    auth?.currentUser?.uid,
+    "household"
+  );
+
   createEffect(() => {
     const unSub = onSnapshot(userRef, (doc) => {
       setUser(doc.data());
@@ -34,16 +41,27 @@ const useStore = () => {
     });
   });
 
+  createEffect(() => {
+    const q = query(houseHoldRef);
+    onSnapshot(q, (querySnap) => {
+      let houseHoldList = [];
+      querySnap.forEach((member) => {
+        houseHoldList.push(member.data());
+      });
+      setHouseHoldMembers(houseHoldList);
+    });
+  });
+
   const updateUserData = async (userData) => {
     const res = await setDoc(userRef, userData, { merge: true });
     return res;
   };
 
   const addHouseHold = async (houseHoldMember) => {
-    const res = await updateDoc(userRef, {
-      household: arrayUnion(houseHoldMember),
+    const user1 = await addDoc(houseHoldRef, houseHoldMember, {
+      merge: true,
     });
-    return res;
+    return user1;
   };
 
   return {
@@ -51,6 +69,7 @@ const useStore = () => {
     updateUserData,
     addHouseHold,
     users,
+    houseHoldMembers,
   };
 };
 

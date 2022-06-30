@@ -39,7 +39,7 @@ const Landing = () => {
           <h3 class="text-2xl sm:text-3xl lg:text-4xl font-bold font-conf">
             Keep Family Contacts Up to Date and Manage Events
           </h3>
-          <h3 class="sm:text-xl text-lg font-arch mt-4">
+          <h3 class="sm:text-xl text-lg font-conf mt-4">
             Connect with all of your family. All of the branches of your life
             are in one location to connect with. Use Branches to plan reunions
             and one-time events and reoccurring activities.

@@ -4,7 +4,7 @@ const LandingPageCard = ({ content, iconUrl, iconName }) => {
       <div class="flex justify-center p-6">
         <img src={iconUrl} alt={iconName} width="100px" />
       </div>
-      <p class="text-2xl text-indigo-900 font-arch font-bold">{content}</p>
+      <p class="text-2xl text-indigo-900 font-conf font-bold">{content}</p>
     </div>
   );
 };

@@ -26,9 +26,9 @@ const ManageHousehold = () => {
     const { name, value } = e.target;
     if (e.target.name === "email") {
       setFormData({ ...formData(), [name]: value.toLowerCase() });
-    } else {
-      setFormData({ ...formData(), [name]: value });
     }
+    setFormData({ ...formData(), [name]: value, isMember: isAccountHolder() });
+
     setError(null);
   };
   const householdForm = document.getElementById("manageHouseHoldForm");
@@ -68,6 +68,7 @@ const ManageHousehold = () => {
           users()?.filter((user) => user.email === formData()?.email)
         );
         setOpenMemberModal(true);
+        console.log(accountHolder());
         setFormData(accountHolder()[0]);
         window.scroll(0, 0);
       } else {
@@ -178,12 +179,13 @@ const ManageHousehold = () => {
                 >
                   <option value="">Choose Relationship</option>
                   <option value="Spouse">Spouse</option>
-                  <option value="Child">Child</option>
+                  <option value="Children">Children</option>
                   <option value="Sibling">Sibling</option>
                   <option value="Parent">Parent</option>
                   <option value="Grand Parent">Grand Parent</option>
-                  <option value="Aunt">Aunt</option>
-                  <option value="Uncle">Uncle</option>
+                  <option value="Grand Children">Grand Children</option>
+                  <option value="Aunt/Uncle">Aunt/Uncle</option>
+                  <option value="Niece/Nephew">Niece/Nephew</option>
                   <option value="Cousin">Cousin</option>
                 </select>
               </div>
@@ -228,12 +230,13 @@ const ManageHousehold = () => {
                 >
                   <option value="">Choose Relationship</option>
                   <option value="Spouse">Spouse</option>
-                  <option value="Child">Child</option>
+                  <option value="Children">Children</option>
                   <option value="Sibling">Sibling</option>
                   <option value="Parent">Parent</option>
                   <option value="Grand Parent">Grand Parent</option>
-                  <option value="Aunt">Aunt</option>
-                  <option value="Uncle">Uncle</option>
+                  <option value="Grand Children">Grand Children</option>
+                  <option value="Aunt/Uncle">Aunt/Uncle</option>
+                  <option value="Niece/Nephew">Niece/Nephew</option>
                   <option value="Cousin">Cousin</option>
                 </select>
               </div>

@@ -1,38 +1,57 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const cors = require("cors")({ origin: true });
 admin.initializeApp();
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
-exports.addUserAddress = functions.https.onRequest((req, res) => {
-  cors(req, res, () => {
-    const userId = req.query.userId;
-    const data = {
-      address: {
-        address1: req.query.address1,
-        address2: req.query.address2,
-        city: req.query.city,
-        state: req.query.state,
-        zip: req.query.zip,
-      },
-    };
+const setRelationship = (relationship) => {
+  switch (relationship) {
+    case "Aunt/Uncle":
+      return "Niece/Nephew";
+    case "Spouse":
+      return "Spouse";
+    case "Sibling":
+      return "Sibling";
+    case "Niece/Nephew":
+      return "Aunt/Uncle";
+    case "Cousin":
+      return "Cousin";
+    case "Parent":
+      return "Children";
+    case "Children":
+      return "Parent";
+    case "Grand Parent":
+      return "Grand Children";
+  }
+};
+
+exports.addHouseHold = functions.firestore
+  .document("users/{userId}/household/{householdId}")
+  .onCreate((snap, context) => {
+    const houseHold = snap.data();
+    if (!houseHold.isMember) {
+      return;
+    }
     admin
-      .auth()
-      .admin.firestore()
-      .doc(userId)
-      .set(data, { merge: true })
-      .then((result) => {
-        console.log(result);
-        return result;
+      .firestore()
+      .collection("users")
+      .doc(context.params.userId)
+      .get()
+      .then((doc) => {
+        const userData = doc.data();
+        admin
+          .firestore()
+          .collection("users")
+          .doc(houseHold.id)
+          .collection("household")
+          .add({
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            phone: userData.phone,
+            email: userData.email,
+            isMember: 1,
+            relationship: setRelationship(houseHold.relationship),
+            id: context.params.userId,
+          })
+          .catch((err) => console.log(err));
       })
-      .catch((err) => {
-        return err;
-      });
+      .catch((err) => console.log(err));
   });
-});
