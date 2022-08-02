@@ -15,13 +15,13 @@ const Modal = (props) => {
       class="absolute top-0 left-0 bottom-0 right-0 backdrop-blur-md z-40 flex justify-center backdrop"
       onClick={handleBackDropClick}
     >
-      <div class="font-conf max-w-full sm:max-w-2xl w-full bg-violet-500 absolute top-[10%] rounded shadow-lg p-3 z-50">
+      <div class="font-conf max-w-full sm:max-w-2xl w-full bg-white absolute top-[10%] rounded shadow-lg p-3 z-50">
         <div class="flex justify-end">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className=" h-6 w-6"
             viewBox="0 0 20 20"
-            fill="white"
+            fill="black"
             onClick={() => props.setShow(false)}
             class="cursor-pointer"
           >

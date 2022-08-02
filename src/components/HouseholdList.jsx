@@ -2,34 +2,50 @@ import { For, Show } from "solid-js";
 import useStore from "../hooks/useStore";
 
 const HouseholdList = () => {
-  const { user, houseHoldMembers } = useStore();
-  console.log(houseHoldMembers());
+  const { user, houseHoldMembers, householdDetails } = useStore();
+
+  const members = houseHoldMembers()?.filter(
+    (member) => member.id !== user().id
+  );
+  console.log(householdDetails(), members);
   return (
-    <Show when={houseHoldMembers()?.length}>
-      <table class="table-fixed my-5 mx-auto">
-        <caption class="font-bold text-center text-lg">
-          Household Members
-        </caption>
-        <thead>
-          <tr>
-            <th>Has App?</th>
-            <th>Name</th>
-            <th>Relationship</th>
-          </tr>
-        </thead>
-        <tbody>
-          <For each={houseHoldMembers()} fallback={<div>Loading...</div>}>
-            {(item) => (
+    <div>
+      <Show when={members?.length}>
+        <div class="w-full flex justify-center">
+          <table class="table-auto border-separate border border-slate-500 my-5 mx-auto">
+            <caption class="font-bold text-center text-lg">
+              Household Members
+            </caption>
+            <thead>
               <tr>
-                <td class="text-center">{item.isMember ? " ✔️ " : " ❌ "}</td>
-                <td>{item.firstName + " " + item.lastName}</td>
-                <td class="text-right">{item.relationship}</td>
+                <th class="border border-slate-600 px-3">Name</th>
+                <th class="border border-slate-600 px-3">Relationship</th>
+                <th class="border border-slate-600 px-3">Has App?</th>
               </tr>
-            )}
-          </For>
-        </tbody>
-      </table>
-    </Show>
+            </thead>
+            <tbody>
+              <For each={members} fallback={<div>Loading...</div>}>
+                {(item) => (
+                  <tr>
+                    <td class="text-center px-3 border border-slate-700">
+                      {item.firstName + " " + item.lastName}
+                    </td>
+                    <td class="text-center px-3 border border-slate-700">
+                      {item.relationship
+                        ? item.relationship
+                        : "Head of Household"}
+                    </td>
+                    <td class="text-center px-3 border border-slate-700">
+                      {item.id ? " ✔️ " : " ❌ "}
+                    </td>
+                  </tr>
+                )}
+              </For>
+            </tbody>
+          </table>
+        </div>
+      </Show>
+    </div>
   );
 };
 

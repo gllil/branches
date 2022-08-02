@@ -1,5 +1,6 @@
 import { useNavigate } from "solid-app-router";
 import { createSignal, onMount, createEffect } from "solid-js";
+import { auth } from "../../firebase/config";
 import useStore from "../hooks/useStore";
 
 const defaultForm = {
@@ -11,17 +12,17 @@ const defaultForm = {
 };
 
 const UpdateAddress = () => {
-  const { user, updateUserData } = useStore();
+  const { user, addHouseHold } = useStore();
   const [formData, setFormData] = createSignal(defaultForm);
+  const [householdId, setHouseholdId] = createSignal(null);
   const [loading, setLoading] = createSignal(false);
   const [userAddress, setUserAddress] = createSignal(null);
   const [warning, setWarning] = createSignal(false);
   const getFormValue = (key) => formData()[key];
 
   const navigate = useNavigate();
-  let address;
 
-  onMount(() => {
+  createEffect(() => {
     const script = document.createElement("script");
     script.src =
       "https://cdn.lob.com/lob/address-elements/2.2.1/address-elements.min.js";
@@ -30,8 +31,9 @@ const UpdateAddress = () => {
       "data-lob-key",
       "live_pub_dcafc668c96c6b52229377916b2bc54"
     );
-    script.setAttribute("data-lob-verify-value", "normal");
     script.setAttribute("data-lob-autosubmit-value", false);
+    script.setAttribute("data-lob-verify-value", "normal");
+
     document.body.appendChild(script);
   });
 
@@ -59,54 +61,47 @@ const UpdateAddress = () => {
     return document.getElementById(id).value;
   };
 
-  const handleAddressSubmit = (e) => {
+  const handleAddressSubmit = async (e) => {
     e.preventDefault();
 
-    address = {
-      address1: getValue("address1"),
-      address2: getValue("address2"),
-      city: getValue("city"),
-      state: getValue("state"),
-      zip: getValue("zip"),
+    const houseHoldData = {
+      headOfHousehold: auth?.currentUser.uid,
+      address: {
+        address1: getValue("address1"),
+        address2: getValue("address2"),
+        city: getValue("city"),
+        state: getValue("state"),
+        zip: getValue("zip"),
+      },
     };
 
-    updateUserData({ address: address })
+    // await addHouseHold(houseHoldData)
+    //   .then(async (household) => {
+    //     await updateUserData({ household: household?.id })
+    //       .then(async (user) => {
+    //         console.log(user);
+    //         await addHouseHoldMember(household?.id, auth?.currentUser.uid)
+    //           .then((member) => {
+    //             console.log(member);
+    //           })
+    //           .catch((err) => console.error(err));
+    //       })
+    //       .catch((err) => console.error(err));
+    //   })
+    //   .catch((err) => console.error(err));
+    // navigate("/profile", { resolve: true });
+    await addHouseHold(houseHoldData)
       .then((res) => {
-        console.log(res);
-        navigate("/profile", { replace: true });
+        console.log("success: " + res.id);
+        navigate("/profile", { resolve: true });
       })
       .catch((err) => console.error(err));
   };
 
   return (
     <div>
-      <div class="w-full flex justify-start mb-2">
-        <button
-          class=" w-20 flex justify-center items-center font-semibold text-lg"
-          onClick={() => navigate("/profile", { replace: true })}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-          Back
-        </button>
-      </div>
       <div class="container mx-auto max-w-screen-sm md:max-w-screen-md">
-        <div class="text-2xl my-2 relative font-semibold before:absolute before:h-1 before:left-0 before:bottom-0 before:content-[''] before:w-7 before:bg-indigo-900">
-          Manage Address
-        </div>
-        <Show when={userAddress()}>
+        {/* <Show when={userAddress()}>
           <div class="flex justify-center my-9">
             <div class="text-left w-fit text-lg">
               <div>{userAddress()?.address1}</div>
@@ -119,7 +114,7 @@ const UpdateAddress = () => {
               </div>
             </div>
           </div>
-        </Show>
+        </Show> */}
         <form
           id="addressForm"
           name="addressForm"

@@ -24,6 +24,17 @@ module.exports = {
             backgroundColor: "#4c1d95",
           },
         },
+        ".tab": {
+          color: "#fff",
+          backgroundColor: "#8b5cf6",
+          padding: "0.5rem",
+          fontFamily: "Comfortaa, cursive",
+          textAlign: "center",
+          transition: "all 0.5s",
+          "@media (max-width: 640px)": {
+            fontSize: "0.75rem",
+          },
+        },
         html: {
           minHeight: "100vh",
         },

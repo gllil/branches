@@ -23,35 +23,67 @@ const setRelationship = (relationship) => {
   }
 };
 
-exports.addHouseHold = functions.firestore
-  .document("users/{userId}/household/{householdId}")
-  .onCreate((snap, context) => {
-    const houseHold = snap.data();
-    if (!houseHold.isMember) {
-      return;
-    }
-    admin
+exports.createNewHouseHold = functions.firestore
+  .document("households/{householdId}")
+  .onCreate(async (snap, context) => {
+    const householdData = snap.data();
+    const householdId = snap.id;
+    return admin
       .firestore()
       .collection("users")
-      .doc(context.params.userId)
+      .doc(householdData.headOfHousehold)
       .get()
       .then((doc) => {
-        const userData = doc.data();
+        const user = doc.data();
         admin
           .firestore()
           .collection("users")
-          .doc(houseHold.id)
-          .collection("household")
-          .add({
-            firstName: userData.firstName,
-            lastName: userData.lastName,
-            phone: userData.phone,
-            email: userData.email,
-            isMember: 1,
-            relationship: setRelationship(houseHold.relationship),
-            id: context.params.userId,
+          .doc(householdData.headOfHousehold)
+          .set(
+            {
+              household: context.params.householdId,
+              headOfHouseHold: true,
+            },
+            { merge: true }
+          )
+          .then(() => {
+            admin
+              .firestore()
+              .collection("households")
+              .doc(householdId)
+              .collection("members")
+              .add({
+                id: householdData.headOfHousehold,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                phone: user.phone,
+              })
+              .catch((err) => console.log(err));
           })
           .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err));
+  });
+exports.joinNewHousehold = functions.firestore
+  .document("households/{householdId}/members/{membersId}")
+  .onCreate(async (snap, context) => {
+    const memberData = snap.data();
+    
+    if (memberData.relationship) {
+      return admin
+            .firestore()
+            .collection("users")
+            .doc(memberData.id)
+            .set(
+              {
+                household: context.params.householdId,
+              },
+              { merge: true }
+            )
+            .catch((err) => console.log(err));
+    } else {
+      return null
+    }
+    
   });
