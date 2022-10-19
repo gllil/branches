@@ -87,7 +87,7 @@ const useStore = () => {
       onSnapshot(q, (querySnap) => {
         let houseHoldList = [];
         querySnap.forEach((member) => {
-          houseHoldList.push(member.data());
+          houseHoldList.push({ ...member.data(), docId: member.id });
         });
         setHouseHoldMembers(houseHoldList);
       });
@@ -108,6 +108,22 @@ const useStore = () => {
     }
   });
 
+  const updateHouseholdMember = async (member, newData) => {
+    const houseHoldMemberRef = doc(
+      db,
+      "households",
+      member?.headOfHouseHold?.household,
+      "members",
+      member?.docId
+    );
+
+    const response = await setDoc(houseHoldMemberRef, newData, {
+      merge: true,
+    });
+
+    return response;
+  };
+
   const updateUserData = async (userData) => {
     const res = await setDoc(userRef, userData, { merge: true });
     return res;
@@ -120,11 +136,11 @@ const useStore = () => {
     return user1;
   };
 
-  const joinHouseHold = async (householdId, newMem, relationship) => {
+  const joinHouseHold = async (householdData, newMem, relationship) => {
     const houseHoldMemberRef = collection(
       db,
       "households",
-      householdId,
+      householdData?.household,
       "members"
     );
     const newMember = await addDoc(
@@ -136,6 +152,8 @@ const useStore = () => {
         email: newMem.email,
         phone: newMem.phone,
         relationship: setRelationship(relationship),
+        accepted: "pending",
+        headOfHouseHold: householdData,
       },
       { merge: true }
     );
@@ -167,6 +185,7 @@ const useStore = () => {
     householdDetails,
     headsOfHouseHold,
     joinHouseHold,
+    updateHouseholdMember,
   };
 };
 

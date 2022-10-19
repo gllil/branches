@@ -1,7 +1,8 @@
-import { createEffect, createSignal, Show } from "solid-js";
+import { createEffect, createSignal, Show, Suspense } from "solid-js";
 import useStore from "../hooks/useStore.js";
 import HouseholdList from "./HouseholdList.jsx";
 import Modal from "./Modal.jsx";
+import PendingHouseholdList from "./PendingHouseholdList.jsx";
 import UpdateAddress from "./UpdateAddress.jsx";
 
 const ManageHousehold = ({
@@ -45,11 +46,7 @@ const ManageHousehold = ({
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
-    joinHouseHold(
-      accountHolder()[0]?.household,
-      user(),
-      formData()?.relationship
-    )
+    joinHouseHold(accountHolder()[0], user(), formData()?.relationship)
       .then(() => {
         addHouseholdForm?.reset();
         setSuccess("HouseHold has been added successfully");
@@ -96,7 +93,12 @@ const ManageHousehold = ({
   return (
     <div class="w-full container flex justify-center mx-auto">
       <div class="font-conf max-w-full sm:max-w-2xl w-full px-7 py-6 rounded my-5 sm:my-0 mx-2 sm:mx-0 block">
-        <HouseholdList />
+        <Suspense>
+          <HouseholdList />
+        </Suspense>
+        <Suspense>
+          <PendingHouseholdList />
+        </Suspense>
         <Show when={openJoinHouseHold()}>
           <Modal setShow={setOpenJoinHouseHold}>
             <div class="text-center font-bold text-xl mt-7">Join Household</div>

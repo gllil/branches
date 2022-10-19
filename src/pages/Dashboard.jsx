@@ -3,11 +3,11 @@ import { auth } from "../../firebase/config";
 import optionTree from "../assets/svg/optionTree.svg";
 import heartFruit from "../assets/svg/heartFruit.svg";
 import "animate.css";
-import { useNavigate } from "solid-app-router";
+import { Link } from "solid-app-router";
 import { HydrationScript, NoHydration } from "solid-js/web";
 const Dashboard = () => {
   const [currentUser, setCurrentUser] = createSignal(null);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   createEffect(() => {
     setCurrentUser(auth.currentUser);
     console.log(currentUser());
@@ -37,15 +37,28 @@ const Dashboard = () => {
           </div>
 
           <div class="absolute top-44 right-[40%] z-10 w-[10%]">
-            <div
+            <Link
               className="relative h-full w-full flex justify-center items-center heart-fruit cursor-pointer"
-              onClick={() => navigate("/profile", { replace: true })}
+              // onClick={() => navigate("/profile", { replace: true })}
+              href="/profile"
             >
               <img src={heartFruit} alt="heart fruit options" />
               <div className="absolute z-20 text-white text-sm lg:text-lg font-semibold font-conf mt-5 ">
                 Profile
               </div>
-            </div>
+            </Link>
+          </div>
+          <div class="absolute top-60 right-[55%] z-10 w-[10%]">
+            <Link
+              className="relative h-full w-full flex justify-center items-center heart-fruit cursor-pointer"
+              // onClick={() => navigate("/profile", { replace: true })}
+              href="/household"
+            >
+              <img src={heartFruit} alt="heart fruit options" />
+              <div className="absolute z-20 text-white text-sm lg:text-lg font-semibold font-conf mt-5 ">
+                Household
+              </div>
+            </Link>
           </div>
 
           <img

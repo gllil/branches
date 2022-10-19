@@ -49,7 +49,7 @@ const Login = () => {
         setTimeout(() => {
           setSuccess(null);
           setLoginProcessing(false);
-          navigate("/dashboard", { replace: true });
+          navigate("/dashboard");
         }, 3000);
       })
       .catch((err) => {

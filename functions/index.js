@@ -1,6 +1,10 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+const sgMail = require("@sendgrid/mail");
+
 admin.initializeApp();
+
+sgMail.setApiKey(functions.config().sendgridemail.apikey);
 
 const setRelationship = (relationship) => {
   switch (relationship) {
@@ -69,21 +73,36 @@ exports.joinNewHousehold = functions.firestore
   .document("households/{householdId}/members/{membersId}")
   .onCreate(async (snap, context) => {
     const memberData = snap.data();
-    
+    console.log(memberData);
+    const msg = {
+      to: memberData.headOfHouseHold.email, // Change to your recipient
+      from: "No Reply <noreply@mybranches.app>", // Change to your verified sender
+      subject: "Join Household Request",
+      // text: "and easy to do anywhere, even with Node.js",
+      html: `<div style="display: flex; justify-content: center">
+      <h1>This is a Test</h1>
+    </div>
+    <div style="display: flex; justify-content: center">
+    <h3>${memberData?.firstName} ${
+        memberData?.lastName
+      } wants to join your household!</h3>
+    <a href="${
+      process.env.FUNCTIONS_EMULATOR === true
+        ? "http://localhost:3000/household"
+        : "https://branches-5434a.web.app/household"
+    }">Approve Request</a>
+    </div>`,
+    };
     if (memberData.relationship) {
-      return admin
-            .firestore()
-            .collection("users")
-            .doc(memberData.id)
-            .set(
-              {
-                household: context.params.householdId,
-              },
-              { merge: true }
-            )
-            .catch((err) => console.log(err));
+      return sgMail
+        .send(msg)
+        .then(() => {
+          console.log("Email sent");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     } else {
-      return null
+      return null;
     }
-    
   });

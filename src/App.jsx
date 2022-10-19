@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import Protected from "./auth/Protected";
 import Profile from "./pages/Profile";
 import UpdateAddress from "./components/UpdateAddress";
+import Household from "./pages/Household";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/address" element={<UpdateAddress />} />
+            <Route path="/household" element={<Household />} />
           </Route>
           <Route path="/*" element={<NotFound />} />
         </Routes>

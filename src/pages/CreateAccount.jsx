@@ -23,7 +23,6 @@ const CreateAccount = () => {
     e.preventDefault();
     if (confPassWord() === password()) {
       setLoading(true);
-      createUserWithEmailAndPassword();
       createUserWithEmailAndPassword(auth, formData().email, password())
         .then(async (userCredential) => {
           const user = userCredential.user;

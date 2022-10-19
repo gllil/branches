@@ -93,7 +93,7 @@ const UpdateAddress = () => {
     await addHouseHold(houseHoldData)
       .then((res) => {
         console.log("success: " + res.id);
-        navigate("/profile", { resolve: true });
+        navigate("/household");
       })
       .catch((err) => console.error(err));
   };
