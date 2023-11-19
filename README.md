@@ -1,3 +1,8 @@
+## App languages
+Using solid js framework [click here](https://start.solidjs.com/getting-started/what-is-solidstart) for documentation.
+Using tailwinds for CSS [click here](https://tailwindcss.com/docs/installation) for documentation.
+Using firebase for backend database and for authentication. This is a serverless backend. Using firebase hosting, firebase functions, & firebase authentication. [click here](https://firebase.google.com/docs/build) for documentation.
+
 ## Usage
 
 Those templates dependencies are maintained via [pnpm](https://pnpm.io) via `pnpm up -Lri`.
